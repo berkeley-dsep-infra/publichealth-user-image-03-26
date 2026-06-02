@@ -6,18 +6,11 @@ channels:
 
 dependencies:
   # Other items
-  - syncthing==1.29.2
-  - jupyter-rsession-proxy==2.2.1
-  - jupyter-syncthing-proxy==1.0.3
   - traitlets==5.14.3
   - appmode==1.0.0
 
   # pip installed packages, conda is preferred
   - pip:
-      # for notebook exporting
-      - nb2pdf==0.6.2
-      - nbpdfexport==0.2.1
-      - jupyter-archive==3.4.0
       - rise==5.7.1
       - git+https://github.com/shaneknapp/python-popularity-contest.git@add-error-handling
       - jupyter-tree-download==1.0.1

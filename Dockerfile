@@ -1,17 +1,20 @@
-FROM us-central1-docker.pkg.dev/ucb-datahub-2018/base-images-repo/base-r-image:c25cdff
+FROM us-central1-docker.pkg.dev/ucb-datahub-2018/base-images-repo/base-r-image:0d6b5ea
 
 USER root
-RUN apt-get update && apt-get install -y tini && rm -rf /var/lib/apt/lists/*
-
 # ------------------------------------------------------------
 # System packages
 # ------------------------------------------------------------
 # Copy your new apt.txt
 COPY apt.txt /tmp/apt.txt
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        tini \
+        $(grep -v '^\s*#' /tmp/apt.txt | grep -v '^\s*$' | tr -d '\r' | tr '\n' ' ') && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/apt.txt
 
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends $(grep -v '^#' /tmp/apt.txt) && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/apt.txt
+COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R
 
 # ------------------------------------------------------------
 # Conda / Python packages
@@ -35,8 +38,6 @@ COPY --chown=${NB_USER}:${NB_USER} image-tests ${REPO_DIR}/image-tests
 USER ${NB_USER}
 WORKDIR /home/${NB_USER}
 
-COPY install.R /tmp/install.R
-RUN r /tmp/install.R
 
 RUN rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
