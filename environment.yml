@@ -6,7 +6,6 @@ channels:
 
 dependencies:
   # Other items
-  - jupyter-rsession-proxy==2.2.1
   - traitlets==5.14.3
   - appmode==1.0.0
 
